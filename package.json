@@ -1,0 +1,16 @@
+{
+  "name": "@nodedk/host",
+  "version": "1.0.0",
+  "description": "NodeDK host",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodedk/host.git"
+  },
+  "author": "Vidar Eldøy <vidar@eldoy.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@nodedk/tools": "^1.0.0"
+  }
+}

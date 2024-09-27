@@ -1,0 +1,18 @@
+# /etc/systemd/system/app@.service
+
+[Unit]
+Description=App '%I'
+# Enable if using mongodb:
+# After=network.target mongodb.service
+StartLimitInterval=0
+
+[Service]
+User=root
+Restart=always
+RestartSec=10ms
+Environment=NODE_ENV=production
+WorkingDirectory=/root/apps/%i/current
+ExecStart=npm run serve
+
+[Install]
+WantedBy=multi-user.target
