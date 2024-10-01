@@ -1,4 +1,4 @@
-# Host
+# Machine
 
 Contains a boot script to install all the software needed to run NodeDK apps.
 
@@ -18,7 +18,7 @@ Choose Ubuntu 22.04 as operating system. Enable private networking if you need t
 
 Once it's running, log in to your server via SSH (`ssh root@ip-address`) and run this command:
 ```sh
-curl https://raw.githubusercontent.com/nodedk/host/master/install.sh | sh
+curl https://raw.githubusercontent.com/nodedk/machine/master/install.sh | sh
 ```
 
 ### Configuration

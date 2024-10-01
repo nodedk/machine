@@ -86,7 +86,7 @@ rm nginx_signing.key
 until apt-get install -y nginx python3-certbot-nginx; do sleep 1; done
 
 # Install default files
-git clone --depth 1 https://github.com/nodedk/host.git
+git clone --depth 1 https://github.com/nodedk/machine.git
 base=$HOME/host/config
 cp $base/etc/ssh/* /etc/ssh
 cp $base/etc/nginx/*.conf /etc/nginx
