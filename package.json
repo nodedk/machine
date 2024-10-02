@@ -9,6 +9,5 @@
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "dependencies": {
     "@nodedk/tools": "^0.1.0"
-  },
-  "private": true
+  }
 }
