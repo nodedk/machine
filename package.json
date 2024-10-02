@@ -1,14 +1,14 @@
 {
   "name": "@nodedk/machine",
   "version": "0.1.0",
-  "description": "NodeDK host",
+  "description": "NodeDK machine",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nodedk/machine.git"
   },
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "dependencies": {
-    "@nodedk/tools": "^1.0.0"
+    "@nodedk/tools": "^0.1.0"
   },
   "private": true
 }
