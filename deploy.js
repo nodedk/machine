@@ -1,5 +1,5 @@
 var fs = require('node:fs')
-var tools = require('@nodedk/tools')
+var tools = require('extras')
 var nginx = require('./lib/nginx.js')
 var util = require('./lib/util.js')
 

@@ -1,4 +1,4 @@
-var tools = require('@nodedk/tools')
+var tools = require('extras')
 var util = require('./lib/util.js')
 
 var name = process.argv[2]
