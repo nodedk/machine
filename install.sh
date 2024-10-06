@@ -87,13 +87,13 @@ until apt-get install -y nginx python3-certbot-nginx; do sleep 1; done
 
 # Install default files
 git clone --depth 1 https://github.com/nodedk/machine.git
-base=$HOME/host/config
+base=$HOME/machine/config
 cp $base/etc/ssh/* /etc/ssh
 cp $base/etc/nginx/*.conf /etc/nginx
 cp $base/etc/systemd/system/*.service /etc/systemd/system
 cp $base/.vimrc $HOME
 cp $base/.zshrc $HOME
-cd $HOME/host && npm i
+cd $HOME/machine && npm i
 cd $HOME
 
 # Enable and start services
