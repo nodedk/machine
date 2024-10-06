@@ -3,8 +3,8 @@ var tools = require('@nodedk/tools')
 var nginx = require('./lib/nginx.js')
 var util = require('./lib/util.js')
 
-var mode = process.env.WAVEORB_DEPLOY_ENV
-var from = process.env.WAVEORB_DEPLOY_BRANCH
+var mode = process.env.NDK_DEPLOY_ENV
+var from = process.env.NDK_DEPLOY_BRANCH
 
 var APPTYPES = { web: 'web', service: 'service', lib: 'lib' }
 
