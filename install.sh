@@ -51,8 +51,8 @@ sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
 apt-get update
 until apt-get install -y mongodb-org; do sleep 1; done
 
-# Install Redis
-until apt-get install -y redis-server; do sleep 1; done
+# Install Redis (Not in use)
+# until apt-get install -y redis-server; do sleep 1; done
 
 # Git configuration
 git config --global pull.rebase false
@@ -102,7 +102,9 @@ systemctl daemon-reload
 # Enable services
 systemctl enable nginx
 systemctl enable mongod
-systemctl enable redis
+
+# Not in use:
+# systemctl enable redis
 
 # SSH keys
 cat /dev/zero | ssh-keygen -q -N ""
