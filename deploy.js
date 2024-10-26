@@ -205,6 +205,11 @@ if (apptype == APPTYPES.web) {
   if (config.sitemap && pkg.scripts?.sitemap) {
     tools.run(`npm run sitemap`)
   }
+
+  // Apply migrations
+  if (pkg.scripts?.migrate) {
+    tools.run(`npm run migrate`)
+  }
 }
 
 // Move stuff into place
