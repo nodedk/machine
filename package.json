@@ -8,6 +8,9 @@
   },
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "dependencies": {
-    "extras": "^0.16.0"
+    "@nodedk/tools": "^0.1.0"
+  },
+  "scripts": {
+    "test": "echo 'no test runner specified'"
   }
 }

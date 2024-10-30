@@ -1,5 +1,5 @@
 var fs = require('node:fs')
-var tools = require('extras')
+var tools = require('@nodedk/tools')
 var nginx = require('./lib/nginx.js')
 var util = require('./lib/util.js')
 
@@ -172,7 +172,7 @@ if (apptype == APPTYPES.web) {
 
       var domainOption = names
         .split(' ')
-        .map((n) => `-d ${n}`)
+        .map(n => `-d ${n}`)
         .join(' ')
 
       var certbotCommand = `certbot certonly --nginx --agree-tos --no-eff-email ${

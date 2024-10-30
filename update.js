@@ -1,4 +1,4 @@
-var tools = require('extras')
+var tools = require('@nodedk/tools')
 
 tools.run(`git reset --hard`)
 tools.run(`git pull`)
