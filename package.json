@@ -1,16 +1,20 @@
 {
   "name": "@nodedk/machine",
-  "version": "0.1.0",
   "description": "NodeDK machine",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nodedk/machine.git"
-  },
+  "version": "0.1.0",
   "author": "Vidar Eldøy <vidar@eldoy.com>",
+  "scripts": {
+    "test": "echo 'no test runner specified'"
+  },
   "dependencies": {
     "@nodedk/tools": "^0.1.0"
   },
-  "scripts": {
-    "test": "echo 'no test runner specified'"
+  "homepage": "https://github.com/nodedk/machine#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodedk/machine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nodedk/machine/issues"
   }
 }
