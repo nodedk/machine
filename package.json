@@ -1,7 +1,7 @@
 {
   "name": "@nodedk/machine",
-  "description": "NodeDK machine",
   "version": "0.1.0",
+  "description": "NodeDK machine",
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "scripts": {
     "test": "echo 'no test runner specified'"
