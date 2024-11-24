@@ -12,13 +12,13 @@ async function main() {
 
   console.log({ name })
 
-  var file = `/root/apps/${name}/current/nodedk.json`
+  var file = `/root/apps/${name}/current/app.json`
   if (!(await _.exist(file))) {
     console.log(`Config file ${file} doesn't exist.`)
     process.exit()
   }
 
-  var config = await _.env(`/root/apps/${name}/current/nodedk.json`)
+  var config = await _.env(`/root/apps/${name}/current/app.json`)
   console.log(config)
 
   if (!config.domains) {

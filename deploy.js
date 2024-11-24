@@ -60,7 +60,7 @@ async function main() {
   }
 
   // Find nodedk config file
-  var config = await _.env('nodedk.json', mode)
+  var config = await _.env('app.json', mode)
 
   console.log(`Using config:`)
   console.log(config)

@@ -1,6 +1,6 @@
 # Config file
 
-Each app has a nodedk.json file in the application root:
+Each app has a app.json file in the application root:
 
 ```yml
 server: 45.32.236.124
