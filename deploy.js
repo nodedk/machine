@@ -165,7 +165,7 @@ async function main() {
       if (ssl && !(await _.exist(cert))) {
         // Need plain http to validate domain
         await _.write(nginxConf, template({ ssl: false }))
-        await _.run(`systemctl restart nginx`)
+        await _.run(`systemctl reload nginx`)
 
         var emailOption = config.email
           ? `--email ${config.email}`
@@ -233,7 +233,7 @@ async function main() {
     await _.run(`systemctl daemon-reload`)
 
     // Restart nginx
-    await _.run(`systemctl restart nginx`)
+    await _.run(`systemctl reload nginx`)
 
     // Start app service if proxy
     if (proxy) {
