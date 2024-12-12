@@ -1,11 +1,11 @@
-var _ = require('@nodedk/tools')
+var tools = require('@nodedk/tools')
 
 async function main() {
-  await _.run(`git reset --hard`)
-  await _.run(`git pull`)
-  await _.run(`npm i`)
-  await _.run(`apt-get update && apt-get upgrade -y`)
-  await _.run(`npm i -g npm`)
+  await tools.run(`git reset --hard`)
+  await tools.run(`git pull`)
+  await tools.run(`npm i`)
+  await tools.run(`apt-get update && apt-get upgrade -y`)
+  await tools.run(`npm i -g npm`)
   process.exit()
 }
 main()

@@ -1,5 +1,5 @@
 var fs = require('node:fs')
-var _ = require('@nodedk/tools')
+var tools = require('@nodedk/tools')
 var nginx = require('./lib/nginx.js')
 var util = require('./lib/util.js')
 
@@ -10,7 +10,7 @@ var APPTYPES = { web: 'web', service: 'service', lib: 'lib' }
 
 var repo = process.argv[2]
 if (!repo) {
-  _.exit(`Repository URL is missing!`)
+  tools.exit(`Repository URL is missing!`)
 }
 console.log(`Deploying repository ${repo}`)
 
@@ -29,51 +29,51 @@ async function main() {
   process.chdir('/root')
 
   // Make sure /root/apps/docs/{data,log} exists or create it
-  await _.run(`mkdir -p apps/${name}/data`)
-  await _.run(`mkdir -p apps/${name}/log`)
+  await tools.run(`mkdir -p apps/${name}/data`)
+  await tools.run(`mkdir -p apps/${name}/log`)
 
   process.chdir(`/root/apps/${name}`)
-  await _.run(`rm -rf tmp`)
+  await tools.run(`rm -rf tmp`)
   var remote = from ? ` --branch ${from}` : ''
-  await _.run(`git clone ${repo} --depth 1${remote} tmp`)
+  await tools.run(`git clone ${repo} --depth 1${remote} tmp`)
 
-  if (!(await _.exist('tmp'))) {
-    _.exit(`Can't clone repo: ${repo}!`)
+  if (!(await tools.exist('tmp'))) {
+    tools.exit(`Can't clone repo: ${repo}!`)
   }
 
   process.chdir(`tmp`)
 
   // Write mode to .env file
   if (mode) {
-    await _.write('.env', mode)
+    await tools.write('.env', mode)
   }
 
-  var revision = _.get('git rev-parse --short HEAD')
-  var branch = _.get(`git rev-parse --abbrev-ref HEAD`)
+  var revision = tools.get('git rev-parse --short HEAD')
+  var branch = tools.get(`git rev-parse --abbrev-ref HEAD`)
   console.log(`Revision ${revision} on ${branch} branch`)
 
   // Fail if revision already exists
-  if (await _.exist(`/root/apps/${name}/${revision}`)) {
-    _.exit(
+  if (await tools.exist(`/root/apps/${name}/${revision}`)) {
+    tools.exit(
       'Revision already exists!\n\nPlease push an update and deploy again.\n'
     )
   }
 
   // Find nodedk config file
-  var config = await _.env('app.json', mode)
+  var config = await tools.env('app.json', mode)
 
   console.log(`Using config:`)
   console.log(config)
 
   if (!config.domains || !config.domains.length) {
-    _.exit('Config domains field is missing!')
+    tools.exit('Config domains field is missing!')
   }
 
   // Find package.json file
-  if (!(await _.exist(`package.json`))) {
-    _.exit('File package.json is missing!')
+  if (!(await tools.exist(`package.json`))) {
+    tools.exit('File package.json is missing!')
   }
-  var pkg = await _.read(`package.json`)
+  var pkg = await tools.read(`package.json`)
 
   // Allow simple domain setting
   if (typeof config.domains == 'string') {
@@ -85,12 +85,12 @@ async function main() {
 
   // Install packages
   console.log('Installing npm packages...')
-  await _.run(`npm i --omit=dev`)
+  await tools.run(`npm i --omit=dev`)
 
   // Build
   if (pkg.scripts?.build) {
     console.log('Building app...')
-    await _.run(`npm run build`)
+    await tools.run(`npm run build`)
   }
 
   var {
@@ -104,7 +104,7 @@ async function main() {
   } = config
 
   if (!APPTYPES[apptype]) {
-    _.exit(`App type must be one of ${Object.keys(APPTYPES).join()}`)
+    tools.exit(`App type must be one of ${Object.keys(APPTYPES).join()}`)
   }
 
   var dist = `/root/apps/${name}/current/dist`
@@ -121,11 +121,11 @@ async function main() {
       // Make sure nginx config for this app exists or create it
       // If create, also add Let's Encrypt certificate
       if (!domain.names) {
-        _.exit('Domain names field is missing!')
+        tools.exit('Domain names field is missing!')
       }
 
       // Skip if it's an IP address, doesn't need nginx config
-      if (_.regexp.ip.test(domain.names)) {
+      if (tools.regexp.ip.test(domain.names)) {
         console.log('Found ip address, skipping...')
         continue
       }
@@ -162,10 +162,10 @@ async function main() {
       var nginxConf = util.nginxName(main, name)
 
       // Set up SSL certificate if it doesn't exist
-      if (ssl && !(await _.exist(cert))) {
+      if (ssl && !(await tools.exist(cert))) {
         // Need plain http to validate domain
-        await _.write(nginxConf, template({ ssl: false }))
-        await _.run(`systemctl reload nginx`)
+        await tools.write(nginxConf, template({ ssl: false }))
+        await tools.run(`systemctl reload nginx`)
 
         var emailOption = config.email
           ? `--email ${config.email}`
@@ -182,73 +182,73 @@ async function main() {
         console.log(certbotCommand)
 
         // Install certificate
-        await _.run(certbotCommand)
+        await tools.run(certbotCommand)
       }
 
       // Write config based on preference
-      await _.write(nginxConf, template({ ssl }))
+      await tools.write(nginxConf, template({ ssl }))
     }
 
     if (basicauth) {
       var [user, password] = basicauth.split(':')
-      await _.run(`htpasswd -b -c ${data}/.htpasswd ${user} ${password}`)
+      await tools.run(`htpasswd -b -c ${data}/.htpasswd ${user} ${password}`)
     }
 
     // Cron jobs
     var { jobs = [] } = config
     if (jobs.length) {
-      var existing = await _.run(`crontab -l`).stdout.trim().split('\n')
+      var existing = await tools.run(`crontab -l`).stdout.trim().split('\n')
       var all = [...new Set(existing.concat(jobs))].join('\n')
-      if (all) await _.run(`echo "${all}" | crontab -`)
+      if (all) await tools.run(`echo "${all}" | crontab -`)
     }
 
     // Build sitemap
     if (config.sitemap && pkg.scripts?.sitemap) {
-      await _.run(`npm run sitemap`)
+      await tools.run(`npm run sitemap`)
     }
 
     // Apply migrations
     if (pkg.scripts?.migrate) {
-      await _.run(`npm run migrate`)
+      await tools.run(`npm run migrate`)
     }
   }
 
   // Move stuff into place
   process.chdir(`/root/apps/${name}`)
-  await _.run(`mv tmp ${revision}`)
+  await tools.run(`mv tmp ${revision}`)
 
   // Record previous revision
-  var prev = (await _.exist('current')) ? fs.readlinkSync('current') : ''
+  var prev = (await tools.exist('current')) ? fs.readlinkSync('current') : ''
 
   // Symlink to new revision
-  await _.run(`ln -sfn ${revision} current`)
+  await tools.run(`ln -sfn ${revision} current`)
 
   if (prev) {
     console.log(`Removing previous revision ${prev}`)
-    await _.run(`rm -rf ${prev}`)
+    await tools.run(`rm -rf ${prev}`)
   }
 
   if (apptype == APPTYPES.web) {
     // Reload services
-    await _.run(`systemctl daemon-reload`)
+    await tools.run(`systemctl daemon-reload`)
 
     // Restart nginx
-    await _.run(`systemctl reload nginx`)
+    await tools.run(`systemctl reload nginx`)
 
     // Start app service if proxy
     if (proxy) {
-      await _.run(`systemctl enable app@${name}`)
-      await _.run(`systemctl restart app@${name}`)
+      await tools.run(`systemctl enable app@${name}`)
+      await tools.run(`systemctl restart app@${name}`)
     } else {
-      await _.run(`systemctl stop app@${name}`)
-      await _.run(`systemctl disable app@${name}`)
+      await tools.run(`systemctl stop app@${name}`)
+      await tools.run(`systemctl disable app@${name}`)
     }
 
     process.chdir(`/root/apps/${name}/current`)
 
     // Ping servers
     if (config.ping && pkg.scripts?.ping) {
-      await _.run(`npm run ping`)
+      await tools.run(`npm run ping`)
     }
   }
 

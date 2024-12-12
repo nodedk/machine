@@ -1,4 +1,4 @@
-var _ = require('@nodedk/tools')
+var tools = require('@nodedk/tools')
 var util = require('./lib/util.js')
 
 var name = process.argv[2]
@@ -13,12 +13,12 @@ async function main() {
   console.log({ name })
 
   var file = `/root/apps/${name}/current/app.json`
-  if (!(await _.exist(file))) {
+  if (!(await tools.exist(file))) {
     console.log(`Config file ${file} doesn't exist.`)
     process.exit()
   }
 
-  var config = await _.env(`/root/apps/${name}/current/app.json`)
+  var config = await tools.env(`/root/apps/${name}/current/app.json`)
   console.log(config)
 
   if (!config.domains) {
@@ -53,23 +53,23 @@ async function main() {
   var service = `app@${name}`
 
   // Stop service
-  await _.run(`systemctl stop ${service}`)
+  await tools.run(`systemctl stop ${service}`)
 
   // Disable service
-  await _.run(`systemctl disable ${service}`)
+  await tools.run(`systemctl disable ${service}`)
 
   for (var domain of domains) {
     // Remove nginx config
     var nginxConf = util.nginxName(domain, name)
 
-    await _.run(`rm ${nginxConf}`)
+    await tools.run(`rm ${nginxConf}`)
 
     // Remove certificate
-    await _.run(`certbot delete --non-interactive --cert-name ${domain}`)
+    await tools.run(`certbot delete --non-interactive --cert-name ${domain}`)
   }
 
   // Delete app
-  await _.run(`rm -rf /root/apps/${name}`)
+  await tools.run(`rm -rf /root/apps/${name}`)
 
   process.exit()
 }
